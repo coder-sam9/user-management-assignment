@@ -51,7 +51,9 @@ const sortByEmail = () => {
           <Text style={styles.errorText}>Failed to load users. Tap to retry.</Text>
         </TouchableOpacity>
       ) : users.length < 1 ? (
+        <View style={styles.emptyContainer}>
         <Text style={styles.emptyText}>No users available</Text>
+        </View>
       ) : (
         <View style={styles.listContainer}>
           <View style={styles.sortContainer}>

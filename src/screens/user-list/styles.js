@@ -48,9 +48,14 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   retryImage: {
-    width: 50,
-    height: 50,
+    width: 100,
+    height: 100,
   },
+  emptyContainer:{
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  }
 });
 
 export default styles;
