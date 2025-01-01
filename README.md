@@ -76,7 +76,25 @@ src/
 ├── assets/           # Images and assets
 └── App.js            # Entry point
 ```
+## Screenshots
+Below are screenshots demonstrating the app's key features:
 
+1. **User List Screen**
+   ![User List Screen](./assets/screenshots/users.jpg)
+
+2. **User Detail Screen**
+   ![User Detail Screen](./assets/screenshots/user-detail.jpg)
+
+3. **Sorting Functionality**
+   ![Sorting Functionality](./assets/screenshots/users-sorted-name.jpg)
+   ![Sorting Functionality](./assets/screenshots/users-sorted-email.jpg)
+3. **Conditional Rendering**
+   ![No Users Text ](./assets/screenshots/no-users.jpg)
+   ![Loading or Fetching](./assets/screenshots/loading-or-fetching.jpg)
+   
+
+5. **Error State with Retry Option**
+   ![Error State](./assets/screenshots/error.jpg)
 ## Troubleshooting
 - Ensure your development environment is correctly set up as per the [React Native Environment Setup Guide](https://reactnative.dev/docs/environment-setup).
 - Check for any errors in the terminal and follow the suggested fixes.
