@@ -4,15 +4,17 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchUsers } from '../../redux/UserSlice';
 import UserListItem from '../../components/user-list-item/UserListItem';
 import ScreenHeader from '../../components/screen-header/ScreenHeader';
-
+import styles from './styles';
 
 const UserListScreen = ({ navigation }) => {
   const dispatch = useDispatch();
   const { users, loading, error } = useSelector((state) => state.users);
   const [usersList, setUsersList] = useState(users);
+  
   useEffect(() => {
     dispatch(fetchUsers());
   }, []);
+  
   useEffect(() => {
     setUsersList(users); // Keep usersList updated with the latest fetched users
   }, [users]);
@@ -35,67 +37,61 @@ const sortByEmail = () => {
 };
 
   return (
-    <View style={{flex: 1, justifyContent: 'center', alignItems: 'center',paddingTop: 20}}>
-      <ScreenHeader heading="User List" />
-    
-
+    <View style={styles.container}>
+      {(!loading || !error) && <ScreenHeader heading="User List" />}
+      
       {loading ? (
-  // 🟡 Show Loader when loading is true
-  <ActivityIndicator size="large" color="#0000ff" />
-) : error ? (
-  // 🔴 Show Retry Button when there's an error
-  <TouchableOpacity onPress={() => dispatch(fetchUsers())} style={{alignItems: 'center',flex:1,justifyContent:'center'}}>
-    <Image source={require('../../assets/images/retry-image.png')} style={{width: 50, height: 50}} />
-    <Text style={{color: 'red', marginTop: 10}}>Failed to load users. Tap to retry.</Text>
-  </TouchableOpacity>
-) : users.length < 1 ? (
-  // 🟢 Show "No users available" if loading & error are false, but users array is empty
-  <Text style={{textAlign: 'center'}}>No users available</Text>
-) : (
-  // ✅ Display the User List if everything is fine
-  <View style={{flex: 1, width: '100%'}}>
-    <View style={{flexDirection: 'row', justifyContent: 'space-between', padding: 10}}>
-    <View style={{flexDirection: 'row', justifyContent: 'space-between', padding: 10}}>
-      <Text>Sort by name</Text>
-      <Switch
-          trackColor={{false: '#767577', true: '#81b0ff'}}
-          thumbColor={isEnabledName ? '#f5dd4b' : '#f4f3f4'}
-          onValueChange={sortByName}
-          value={isEnabledName}
-        />
-      </View>
-    <View style={{flexDirection: 'row', justifyContent: 'space-between', padding: 10}}>
-      <Text>Sort by email</Text>
-      <Switch
-          trackColor={{false: '#767577', true: '#81b0ff'}}
-          thumbColor={isEnabledEmail ? '#f5dd4b' : '#f4f3f4'}
-          onValueChange={sortByEmail}
-          value={isEnabledEmail}
-        />
-      </View>
-      </View>
-    <FlatList
-      data={usersList}
-      keyExtractor={(item) => item.email}
-      renderItem={({item, index}) => (
-        <UserListItem 
-          name={item.name.first} 
-          email={item.email} 
-          onPress={() => navigation.navigate('UserDetail', {user: item})} 
-          id={index} 
-          imgUrl={item.picture.medium} 
-          phone={item.phone} 
-        />
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color="#0000ff" />
+          <Text style={styles.loadingText}>Fetching the data, please wait</Text>
+        </View>
+      ) : error ? (
+        <TouchableOpacity onPress={() => dispatch(fetchUsers())} style={styles.errorContainer}>
+          <Image source={require('../../assets/images/retry-image.png')} style={styles.retryImage} />
+          <Text style={styles.errorText}>Failed to load users. Tap to retry.</Text>
+        </TouchableOpacity>
+      ) : users.length < 1 ? (
+        <Text style={styles.emptyText}>No users available</Text>
+      ) : (
+        <View style={styles.listContainer}>
+          <View style={styles.sortContainer}>
+            <View style={styles.switchContainer}>
+              <Text>Sort by name</Text>
+              <Switch
+                trackColor={{ false: '#767577', true: '#81b0ff' }}
+                thumbColor={isEnabledName ? '#f5dd4b' : '#f4f3f4'}
+                onValueChange={sortByName}
+                value={isEnabledName}
+              />
+            </View>
+            <View style={styles.switchContainer}>
+              <Text>Sort by email</Text>
+              <Switch
+                trackColor={{ false: '#767577', true: '#81b0ff' }}
+                thumbColor={isEnabledEmail ? '#f5dd4b' : '#f4f3f4'}
+                onValueChange={sortByEmail}
+                value={isEnabledEmail}
+              />
+            </View>
+          </View>
+          <FlatList
+            data={usersList}
+            keyExtractor={(item) => item.email}
+            renderItem={({ item, index }) => (
+              <UserListItem
+                name={item.name.first.trim()}
+                email={item.email.trim()}
+                onPress={() => navigation.navigate('UserDetail', { user: item })}
+                id={index}
+                imgUrl={item.picture.medium}
+                phone={item.phone}
+              />
+            )}
+          />
+        </View>
       )}
-    />
-  </View>
-)}
-
     </View>
-    // <TouchableOpacity onPress={()=>navigation.navigate('UserDetail')} style={{flex:1,justifyContent:'center',alignItems:'center',backgroundColor
-    // :'red'
-    // }}> 
-    //   <Text style={{color:'yellow'}}>UserListScreen</Text></TouchableOpacity>
   );
 };
+
 export default UserListScreen;
